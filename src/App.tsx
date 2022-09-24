@@ -1,16 +1,29 @@
 import './App.css';
 import useCounter from './hooks/useCounter';
 import PeopleList from './PeopleList';
+import {useEffect, useRef} from "react";
 
 function App() {
-  const number = useCounter(5)
-  return (
-    <div className="App">
-      { number }
-      <PeopleList />
-      <PeopleList />
-    </div>
-  );
+    const number = useCounter(5)
+    const counter = useRef(2)
+    const div = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if(div.current) {
+            div.current.style.backgroundColor = 'green'
+        }
+    }, [])
+
+    return (
+        <div className="App" ref={div}>
+            {number}
+            <div style={{backgroundColor: 'peachpuff'}}>
+                {counter.current}
+            </div>
+            <PeopleList/>
+            <PeopleList/>
+        </div>
+    );
 }
 
 export default App;
