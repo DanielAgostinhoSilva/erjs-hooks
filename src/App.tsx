@@ -1,27 +1,54 @@
 import './App.css';
-import useCounter from './hooks/useCounter';
-import PeopleList from './PeopleList';
-import {useEffect, useRef} from "react";
+import {useReducer} from "react";
+
+interface InitialState {
+    count: number
+}
+
+
+const initialState: InitialState = {
+    count: 1
+}
+
+interface CountAction {
+    type: 'INCREMENT' | 'DECREMENT'
+}
+
+function reducer(state: InitialState, action: CountAction): InitialState {
+    switch (action.type) {
+        case "INCREMENT":
+            return {count: state.count + 1}
+        case "DECREMENT":
+            return {count: state.count - 1}
+        default:
+            return state
+    }
+
+}
 
 function App() {
-    const number = useCounter(5)
-    const counter = useRef(2)
-    const div = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        if(div.current) {
-            div.current.style.backgroundColor = 'green'
-        }
-    }, [])
+    const [state, dispatch] = useReducer(reducer, initialState)
 
     return (
-        <div className="App" ref={div}>
-            {number}
+        <div className="App" >
             <div style={{backgroundColor: 'peachpuff'}}>
-                {counter.current}
+                {state.count}
             </div>
-            <PeopleList/>
-            <PeopleList/>
+            <button
+                onClick={() => {
+                    dispatch({ type: 'INCREMENT' , payload: 5 })
+                }}
+            >
+                acrescer
+            </button>
+            <button
+                onClick={() => {
+                    dispatch({ type: 'DECREMENT' })
+                }}
+            >
+                Diminuir
+            </button>
         </div>
     );
 }
